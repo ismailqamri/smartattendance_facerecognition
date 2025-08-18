@@ -1,7 +1,7 @@
-# backend/app.py
-
-from fastapi import FastAPI
-from backend.utils.db import engine, Base
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+from backend.utils.db import engine, Base, get_db
 from backend.routes import (
     auth,
     students,
@@ -12,26 +12,21 @@ from backend.routes import (
     subjects
 )
 
-# Initialize FastAPI app
 app = FastAPI(
-    title="Smart Attendance System",
-    description="A face-recognition-based attendance system with student and teacher features",
+    title="Smart Attendance System API",
+    description="API for Smart Attendance System with Face Recognition",
     version="1.0.0"
 )
 
-# ⚠️ Skip table creation since tables already exist in MySQL
-# Base.metadata.create_all(bind=engine)
-
-# Register routers from routes/ folder
-app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
-app.include_router(students.router, prefix="/students", tags=["Students"])
-app.include_router(teachers.router, prefix="/teachers", tags=["Teachers"])
-app.include_router(attendance.router, prefix="/attendance", tags=["Attendance"])
-app.include_router(classes.router, prefix="/classes", tags=["Classes"])
-app.include_router(notifications.router, prefix="/notifications", tags=["Notifications"])
-app.include_router(subjects.router, prefix="/subjects", tags=["Subjects"])
-
-# Root route (health check)
 @app.get("/")
 def read_root():
     return {"message": "🚀 Smart Attendance System API is running"}
+
+# ✅ Test DB connection
+@app.get("/test/ping")
+def test_db_connection(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("SELECT 1"))
+        return {"message": "✅ Database connection successful"}
+    except Exception as e:
+        return {"error": str(e)}
