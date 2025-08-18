@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 # -------------------------
 # Change these values to match your MySQL setup
 DB_USERNAME = "root"          # Your MySQL username
-DB_PASSWORD = ""              # Your MySQL password ("" if none)
+DB_PASSWORD = "124421"              # Your MySQL password ("" if none)
 DB_HOST = "localhost"         # or "127.0.0.1"
 DB_PORT = "3306"              # default MySQL port
 DB_NAME = "smart_attendance"  # Your database name
