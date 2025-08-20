@@ -1,5 +1,8 @@
-import api from './api';
+import api from "./api";
 
-export const studentService = {
-  getAttendance: (studentId) => api.get(`/students/${studentId}/attendance`),
+const studentService = {
+  getAttendance: () => api.get("/students/attendance"),
+  getNotifications: () => api.get("/students/notifications"),
 };
+
+export default studentService;

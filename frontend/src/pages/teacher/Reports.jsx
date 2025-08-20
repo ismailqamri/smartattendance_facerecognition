@@ -1,22 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { teacherService } from '../services/teacherService';
-import { AttendanceChart } from '../components/AttendanceChart';
+import React from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-const Reports = () => {
-  const [summary, setSummary] = useState([]);
-
-  useEffect(() => {
-    teacherService.getAttendanceSummary()
-      .then(res => setSummary(res.data))
-      .catch(err => console.error(err));
-  }, []);
+export default function Reports() {
+  const data = [
+    { subject: "Math", percentage: 80 },
+    { subject: "Science", percentage: 90 },
+    { subject: "History", percentage: 70 },
+  ];
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Attendance Reports</h2>
-      <AttendanceChart data={summary} />
+      <h1 className="text-2xl font-bold mb-4">Attendance Reports</h1>
+      <div className="bg-white shadow rounded p-4">
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={data}>
+            <XAxis dataKey="subject" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="percentage" fill="#8884d8" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
-};
-
-export default Reports;
+}

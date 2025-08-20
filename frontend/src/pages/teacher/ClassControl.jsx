@@ -1,40 +1,36 @@
-import React, { useState, useContext } from 'react';
-import { teacherService } from '../services/teacherService';
-import { AuthContext } from '../context/AuthContext';
+import React, { useState } from "react";
 
-const ClassControl = () => {
-  const { user } = useContext(AuthContext);
-  const [classActive, setClassActive] = useState(false);
+export default function ClassControl() {
+  const [students, setStudents] = useState([
+    { id: 1, name: "John Doe", present: false },
+    { id: 2, name: "Jane Smith", present: false },
+  ]);
 
-  const handleStart = () => {
-    teacherService.startClass(user.id)
-      .then(() => setClassActive(true))
-      .catch(err => console.error(err));
-  };
-
-  const handleStop = () => {
-    teacherService.stopClass(user.id)
-      .then(() => setClassActive(false))
-      .catch(err => console.error(err));
+  const toggleAttendance = (id) => {
+    setStudents(students.map(s => s.id === id ? {...s, present: !s.present} : s));
   };
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Class Control</h2>
-      <div>
-        {classActive ? (
-          <button onClick={handleStop} className="bg-red-500 text-white px-4 py-2 rounded">
-            Stop Class
-          </button>
-        ) : (
-          <button onClick={handleStart} className="bg-green-500 text-white px-4 py-2 rounded">
-            Start Class
-          </button>
-        )}
-      </div>
+      <h1 className="text-2xl font-bold mb-4">Class Control</h1>
+      <table className="w-full table-auto border-collapse bg-white shadow rounded">
+        <thead>
+          <tr>
+            <th className="border p-2">Student</th>
+            <th className="border p-2">Present</th>
+          </tr>
+        </thead>
+        <tbody>
+          {students.map(s => (
+            <tr key={s.id}>
+              <td className="border p-2">{s.name}</td>
+              <td className="border p-2 text-center">
+                <input type="checkbox" checked={s.present} onChange={() => toggleAttendance(s.id)} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
-
-export default ClassControl;
-
+}

@@ -1,27 +1,22 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { notificationService } from '../services/notificationService';
-import { AuthContext } from '../context/AuthContext';
-import { NotificationCard } from '../components/NotificationCard';
+import React, { useState, useEffect } from "react";
 
-const Notifications = () => {
-  const { user } = useContext(AuthContext);
-  const [notifications, setNotifications] = useState([]);
-
-  useEffect(() => {
-    notificationService.getNotifications(user.id)
-      .then(res => setNotifications(res.data))
-      .catch(err => console.error(err));
-  }, [user]);
+export default function StudentNotifications() {
+  const [notifications, setNotifications] = useState([
+    { id: 1, message: "Your attendance in Math is below 75%" },
+    { id: 2, message: "Science class on 20th Aug was missed" },
+  ]);
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Notifications</h2>
+      <h1 className="text-2xl font-bold mb-4">Notifications</h1>
       {notifications.length === 0 && <p>No notifications</p>}
-      {notifications.map((note, idx) => (
-        <NotificationCard key={idx} title={note.title} message={note.message} />
-      ))}
+      <ul className="space-y-2">
+        {notifications.map((note) => (
+          <li key={note.id} className="bg-yellow-100 p-2 rounded">
+            {note.message}
+          </li>
+        ))}
+      </ul>
     </div>
   );
-};
-
-export default Notifications;
+}
